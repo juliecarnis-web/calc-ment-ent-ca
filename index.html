@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcul mental - entraînement - Classe Adaptative</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #cbd5e1; overflow-x: hidden; }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"], input[type="text"] { -moz-appearance: textfield; }
+
+        /* Animation Flip 3D */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .front, .back { 
+            backface-visibility: hidden; 
+            -webkit-backface-visibility: hidden;
+            background-color: white; 
+            display: flex;
+            flex-direction: column;
+        }
+        .back { z-index: 10; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .flipper { transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1); height: 100%; }
+        .flipped .flipper { transform: rotateY(180deg); }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+
+        #cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.5rem;
+            padding: 10px;
+            height: 100%;
+        }
+
+        @media (max-width: 640px) {
+            .perspective-1000 { width: 100% !important; margin: 0 auto; min-height: 85vh; }
+            h1 { font-size: 1.2rem !important; }
+            .controls-bar { flex-direction: column !important; gap: 10px !important; }
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col text-slate-800 bg-slate-200">
+
+    <!-- SVG Definitions for Abacus Beads Shadows -->
+    <svg width="0" height="0" class="hidden">
+        <defs>
+            <radialGradient id="gradRed" cx="40%" cy="30%" r="60%">
+                <stop offset="0%" stop-color="#fca5a5"/>
+                <stop offset="35%" stop-color="#ef4444"/>
+                <stop offset="100%" stop-color="#7f1d1d"/>
+            </radialGradient>
+            <radialGradient id="gradBlue" cx="40%" cy="30%" r="60%">
+                <stop offset="0%" stop-color="#93c5fd"/>
+                <stop offset="35%" stop-color="#3b82f6"/>
+                <stop offset="100%" stop-color="#1e3a8a"/>
+            </radialGradient>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.4"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- HEADER GLOBAL NOIR -->
+    <header class="bg-black text-white flex flex-col md:flex-row justify-between items-center px-6 py-4 shadow-xl z-20 shrink-0 gap-4 border-b-4 border-emerald-500">
+        <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
+            <div class="bg-white/10 p-3 rounded-xl hidden md:flex items-center justify-center">
+                <i class="fa-solid fa-brain text-2xl text-emerald-400"></i>
+            </div>
+            <div class="text-center md:text-left">
+                <h1 class="text-2xl md:text-3xl font-black uppercase tracking-wide text-white">Calcul mental - entraînement</h1>
+                <p class="text-sm font-bold tracking-widest text-emerald-400 uppercase mt-1">Classe Adaptative</p>
+            </div>
+        </div>
+        <div class="flex flex-wrap justify-center bg-white/10 rounded-full p-1 border border-white/20 font-bold text-sm" id="players-selector">
+            <button data-players="1" class="player-btn px-4 md:px-6 py-2 rounded-full bg-emerald-500 text-white shadow transition">INDIVIDUEL</button>
+            <button data-players="2" class="player-btn px-4 md:px-6 py-2 rounded-full hover:bg-white/20 text-white transition">DUEL</button>
+            <button data-players="3" class="player-btn px-4 md:px-6 py-2 rounded-full hover:bg-white/20 text-white transition hidden md:block">TRIPLE</button>
+            <button data-players="4" class="player-btn px-4 md:px-6 py-2 rounded-full hover:bg-white/20 text-white transition">ÉQUIPE</button>
+        </div>
+    </header>
+
+    <!-- BARRE DE CONTROLES GLOBALE -->
+    <div class="bg-white shadow-md border-b border-slate-300 px-4 md:px-8 py-3 flex flex-wrap justify-between items-center gap-4 z-10 shrink-0 controls-bar">
+        <div class="flex flex-wrap space-x-2 font-bold text-sm bg-slate-100 p-1.5 rounded-xl w-full md:w-auto justify-center">
+            <button data-mode="entrainement" class="mode-btn px-5 py-2 rounded-lg bg-slate-800 text-white shadow-md transition transform hover:scale-105">ENTRAÎNEMENT</button>
+            <button data-mode="sprint" class="mode-btn px-5 py-2 rounded-lg text-slate-600 hover:bg-slate-200 transition transform hover:scale-105">SPRINT 30s</button>
+        </div>
+        
+        <div class="flex flex-wrap gap-4 items-center justify-center w-full md:w-auto">
+            <div id="global-timer" class="hidden text-slate-900 font-black text-2xl bg-amber-100 px-6 py-2 rounded-xl border-2 border-amber-400 shadow-inner text-center w-32">
+                <i class="fa-solid fa-clock mr-2 animate-pulse text-amber-600"></i><span id="timer-val">30</span>
+            </div>
+            <!-- Bouton Global Bascule -->
+            <button id="btn-verify-all" onclick="toggleAllCards()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-xl font-black shadow-lg transition transform hover:-translate-y-1 w-full md:w-auto text-lg tracking-wide border-b-4 border-emerald-700 active:border-b-0 active:translate-y-1">
+                <i class="fa-solid fa-check-double mr-2"></i>VÉRIFIER TOUT
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="flex-1 p-4 md:p-6 flex flex-col overflow-y-auto w-full custom-scrollbar">
+        <div id="cards-container">
+            <!-- Cartes injectées ici -->
+        </div>
+    </main>
+
+    <script>
+        // --- DICTIONNAIRE DES COMPÉTENCES ---
+        const SKILLS = {
+            'CP': [
+                {id: 'add_sub_5', name: 'Ajouter ou soustraire 5'},
+                {id: 'tables_add_sub_cp', name: 'Tables d\'additions'},
+                {id: 'add_8_9_cp', name: 'Ajouter 8 ou 9'},
+                {id: 'comp_10', name: 'Compléments à 10'},
+                {id: 'doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'somme_simple_cp', name: 'Somme simple < 10 et < 50'}
+            ],
+            'CE1': [
+                {id: 'add_sub_10_100', name: 'Ajouter ou soustraire 10, 100'},
+                {id: 'tables_add_sub_ce1', name: 'Tables additions et soustractions'},
+                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'comp_10_100', name: 'Compléments à 10, 100'},
+                {id: 'mult_1_5', name: 'Tables de multiplication x1 à x5'},
+                {id: 'doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'mult_10', name: 'Multiplier par 10'},
+                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+            ],
+            'CE2': [
+                {id: 'add_sub_10_100_1000', name: 'Ajouter ou soustraire 10, 100, 1000'},
+                {id: 'tables_add_sub_ce2', name: 'Consolider tables additions et soustractions'},
+                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'comp_100_1000', name: 'Compléments à 100, 1000'},
+                {id: 'mult_1_5', name: 'Consolider tables de multiplication x1 à x5'},
+                {id: 'mult_6_10', name: 'Construire tables de multiplication x6 à x10'},
+                {id: 'doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'mult_10_100_1000', name: 'Multiplier par 10, 100, 1000'},
+                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+            ],
+            'CM1': [
+                {id: 'add_sub_10k_100k', name: '+ ou - 10 000, 100 000'},
+                {id: 'tables_add_sub_cm1', name: 'Réviser tables additions et soustractions'},
+                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'comp_10k_100k', name: 'Compléments à 10 000, 100 000'},
+                {id: 'mult_1_10', name: 'Consolider tables de multiplication x1 à x10'},
+                {id: 'mult_11_12', name: 'Construire tables de multiplication x11 à x12'},
+                {id: 'doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'mult_1k_10k', name: 'Multiplier par 1 000, 10 000'},
+                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+            ],
+            'CM2': [
+                {id: 'add_sub_10k_100k_1m', name: '+ ou - 10k, 100k, 1 000 000'},
+                {id: 'tables_add_sub_cm2', name: 'Réviser tables additions et soustractions'},
+                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'comp_10k_100k_1m', name: 'Compléments à 10k, 100k, 1 000 000'},
+                {id: 'mult_1_12', name: 'Consolider tables de multiplication x1 à x12'},
+                {id: 'doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'mult_10k_100k_1m', name: 'Multiplier par 10k, 100k, 1 000 000'},
+                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+            ]
+        };
+
+        const LIMITS_PER_LEVEL = {
+            'CP': 100, 'CE1': 1000, 'CE2': 10000, 'CM1': 100000, 'CM2': 1000000
+        };
+
+        let globalState = { mode: 'entrainement', playersCount: 1, timer: null, timeLeft: 30, isGlobalFlipped: false };
+        let cardsData = []; 
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupGlobalListeners();
+            setPlayers(1);
+        });
+
+        function setupGlobalListeners() {
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.mode-btn').forEach(b => { b.classList.remove('bg-slate-800', 'text-white', 'shadow-md'); b.classList.add('text-slate-600'); });
+                    e.target.classList.remove('text-slate-600'); e.target.classList.add('bg-slate-800', 'text-white', 'shadow-md');
+                    globalState.mode = e.target.dataset.mode;
+                    
+                    document.getElementById('global-timer').classList.toggle('hidden', globalState.mode !== 'sprint');
+                    if(globalState.mode === 'sprint') { startTimer(); initAllGames(); } 
+                    else { stopTimer(); initAllGames(); }
+                });
+            });
+
+            document.querySelectorAll('.player-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.player-btn').forEach(b => { b.classList.remove('bg-emerald-500', 'text-white', 'shadow'); b.classList.add('text-white'); });
+                    e.target.classList.remove('text-white'); e.target.classList.add('bg-emerald-500', 'text-white', 'shadow');
+                    setPlayers(parseInt(e.target.dataset.players));
+                });
+            });
+        }
+
+        function startTimer() {
+            stopTimer(); globalState.timeLeft = 30; updateTimerUI();
+            globalState.timer = setInterval(() => {
+                globalState.timeLeft--; updateTimerUI();
+                if(globalState.timeLeft <= 0) { 
+                    stopTimer(); 
+                    if(!globalState.isGlobalFlipped) toggleAllCards(); 
+                }
+            }, 1000);
+        }
+        function stopTimer() { clearInterval(globalState.timer); }
+        function updateTimerUI() {
+            const span = document.getElementById('timer-val');
+            if(span) span.innerText = globalState.timeLeft;
+            const container = document.getElementById('global-timer');
+            if(globalState.timeLeft <= 10) {
+                container.classList.replace('text-slate-900', 'text-red-600');
+                container.classList.replace('bg-amber-100', 'bg-red-100');
+                container.classList.replace('border-amber-400', 'border-red-500');
+            } else {
+                container.classList.replace('text-red-600', 'text-slate-900');
+                container.classList.replace('bg-red-100', 'bg-amber-100');
+                container.classList.replace('border-red-500', 'border-amber-400');
+            }
+        }
+
+        // --- GESTION DU BOUTON GLOBAL BASCULE ---
+        function toggleAllCards() {
+            let btn = document.getElementById('btn-verify-all');
+            if (!globalState.isGlobalFlipped) {
+                // VERIFIER
+                for(let i=0; i<globalState.playersCount; i++) corriger(i);
+                globalState.isGlobalFlipped = true;
+                btn.innerHTML = `<i class="fa-solid fa-rotate-right mr-2"></i>NOUVEAU TOUR`;
+                btn.classList.replace('bg-emerald-500', 'bg-blue-600');
+                btn.classList.replace('hover:bg-emerald-600', 'hover:bg-blue-700');
+                btn.classList.replace('border-emerald-700', 'border-blue-800');
+                stopTimer();
+            } else {
+                // NOUVEAU TOUR
+                for(let i=0; i<globalState.playersCount; i++) retourner(i);
+                globalState.isGlobalFlipped = false;
+                btn.innerHTML = `<i class="fa-solid fa-check-double mr-2"></i>VÉRIFIER TOUT`;
+                btn.classList.replace('bg-blue-600', 'bg-emerald-500');
+                btn.classList.replace('hover:bg-blue-700', 'hover:bg-emerald-600');
+                btn.classList.replace('border-blue-800', 'border-emerald-700');
+                if(globalState.mode === 'sprint') startTimer();
+            }
+        }
+
+        function setPlayers(count) {
+            globalState.playersCount = count;
+            const container = document.getElementById('cards-container');
+            
+            let newCardsData = [];
+            for(let i=0; i<count; i++) {
+                let defaultLevel = 'CE2';
+                let defaultLimit = LIMITS_PER_LEVEL[defaultLevel];
+                let defaultSkill = SKILLS[defaultLevel][0].id; 
+                newCardsData.push(cardsData[i] || { level: defaultLevel, skill: defaultSkill, limit: defaultLimit, format: 'classique' });
+            }
+            cardsData = newCardsData;
+
+            container.innerHTML = '';
+            for(let i=0; i<count; i++) container.innerHTML += createCardHTML(i);
+            
+            for(let i=0; i<count; i++) updateSkillSelectUI(i);
+            
+            globalState.isGlobalFlipped = false;
+            let btn = document.getElementById('btn-verify-all');
+            btn.innerHTML = `<i class="fa-solid fa-check-double mr-2"></i>VÉRIFIER TOUT`;
+            btn.classList.replace('bg-blue-600', 'bg-emerald-500');
+            btn.classList.replace('hover:bg-blue-700', 'hover:bg-emerald-600');
+            btn.classList.replace('border-blue-800', 'border-emerald-700');
+
+            initAllGames();
+        }
+
+        // =====================================================================
+        // === MOTEUR SVG DU BOULIER (MODELE SOROBAN MODERNE CORRIGÉ) ===
+        // =====================================================================
+        function renderAbacusSVG(numStr, limit) {
+            let rodCount = 2; 
+            if(limit >= 1000) rodCount = 3;
+            if(limit >= 10000) rodCount = 4;
+            if(limit >= 100000) rodCount = 5;
+            if(limit >= 1000000) rodCount = 6;
+            if(limit >= 10000000) rodCount = 7;
+            
+            let str = numStr.toString().padStart(rodCount, '0');
+            if (str.length > rodCount) rodCount = str.length;
+
+            let r = 15; 
+            let d = r * 2; 
+            let rodSpacing = 40; 
+            let padding = 30; 
+            let w = (rodCount - 1) * rodSpacing + padding * 2;
+            let h = 220; 
+            let beamY = 70; 
+            let beamHeight = 10;
+            
+            let svg = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%; max-height: 250px; background: white; border-radius:12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">`;
+            
+            // Barre centrale
+            svg += `<rect x="0" y="${beamY}" width="${w}" height="${beamHeight}" fill="#334155" rx="2"/>`;
+
+            for(let i=0; i<rodCount; i++) {
+                let cx = padding + i * rodSpacing; 
+                
+                // Tige métallique
+                svg += `<line x1="${cx}" y1="0" x2="${cx}" y2="${h}" stroke="#9ca3af" stroke-width="6"/>`;
+
+                let val = parseInt(str[i]);
+                let topVal = val >= 5 ? 1 : 0; 
+                let botVal = val % 5;             
+
+                // --- BILLE ROUGE QUINAIRE (HAUT - Valeur 5) ---
+                let rTopRest = r + 4; 
+                let rTopActive = beamY - r - 2; 
+                let cyTop = topVal > 0 ? rTopActive : rTopRest;
+                svg += `<circle cx="${cx}" cy="${cyTop}" r="${r}" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>`;
+
+                // --- BILLES BLEUES LUNAIRES (BAS - 4 BILLES - Valeur 1) ---
+                for(let b=0; b<4; b++) {
+                    let cyBot;
+                    if (b < botVal) {
+                        // Activée : Remonte contre la barre
+                        cyBot = (beamY + beamHeight) + r + 2 + b * (d + 2); 
+                    } else {
+                        // Repos : Descend vers le bas du cadre
+                        cyBot = (h - r - 4) - (3 - b) * (d + 2);   
+                    }
+                    svg += `<circle cx="${cx}" cy="${cyBot}" r="${r}" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>`;
+                }
+            }
+            svg += `</svg>`;
+            return svg;
+        }
+
+        // =====================================================================
+        // === MOTEUR RENDU BLOCS BASE 10 (CP/CE1) ===
+        // =====================================================================
+        function renderBlocksHTML(num) {
+            if (num > 5000) {
+                return `<div class="flex items-center justify-center w-full h-full p-4 text-center">
+                            <span class="text-xl md:text-2xl font-black text-white bg-red-500 px-6 py-4 rounded-xl border-4 border-red-700 shadow-lg">
+                                <i class="fa-solid fa-eye-slash mr-2"></i>Limite visuelle (max 5000)
+                            </span>
+                        </div>`;
+            }
+
+            let str = num.toString().padStart(4, '0');
+            let th = parseInt(str[str.length - 4]) || 0;
+            let h = parseInt(str[str.length - 3]) || 0;
+            let t = parseInt(str[str.length - 2]) || 0;
+            let u = parseInt(str[str.length - 1]) || 0;
+
+            // SVG - Unité
+            let svgUnit = `<svg viewBox="0 -5 14 14" style="width:16px; height:16px;" class="drop-shadow-sm overflow-visible">
+                <polygon points="0,0 4,-4 12,-4 8,0" fill="#fde047" stroke="#ca8a04" stroke-width="0.5" stroke-linejoin="round"/>
+                <polygon points="8,0 12,-4 12,4 8,8" fill="#ca8a04" stroke="#a16207" stroke-width="0.5" stroke-linejoin="round"/>
+                <rect x="0" y="0" width="8" height="8" fill="#eab308" stroke="#ca8a04" stroke-width="0.5" stroke-linejoin="round"/>
+            </svg>`;
+
+            // SVG - Dizaine
+            let svgTen = `<svg viewBox="0 -5 14 86" style="width:16px; height:86px;" class="drop-shadow-sm overflow-visible">
+                <polygon points="0,0 4,-4 12,-4 8,0" fill="#93c5fd" stroke="#2563eb" stroke-width="0.5" stroke-linejoin="round"/>
+                <polygon points="8,0 12,-4 12,76 8,80" fill="#2563eb" stroke="#1e40af" stroke-width="0.5" stroke-linejoin="round"/>
+                <rect x="0" y="0" width="8" height="80" fill="#3b82f6" stroke="#2563eb" stroke-width="0.5" stroke-linejoin="round"/>
+                <path d="`;
+                for(let i=1; i<10; i++) svgTen += `M0,${i*8} h8 l4,-4 `;
+            svgTen += `" stroke="#2563eb" stroke-width="0.5" fill="none"/></svg>`;
+
+            // SVG - Centaine
+            let svgHundred = `<svg viewBox="0 -5 86 86" style="width:86px; height:86px;" class="drop-shadow-md overflow-visible">
+                <polygon points="0,0 4,-4 84,-4 80,0" fill="#86efac" stroke="#16a34a" stroke-width="0.5" stroke-linejoin="round"/>
+                <polygon points="80,0 84,-4 84,76 80,80" fill="#16a34a" stroke="#15803d" stroke-width="0.5" stroke-linejoin="round"/>
+                <rect x="0" y="0" width="80" height="80" fill="#22c55e" stroke="#16a34a" stroke-width="0.5" stroke-linejoin="round"/>
+                <path d="`;
+                for(let i=1; i<10; i++) {
+                    let p = i*8;
+                    svgHundred += `M${p},0 v80 M${p},0 l4,-4 M0,${p} h80 M80,${p} l4,-4 `;
+                }
+            svgHundred += `" stroke="#16a34a" stroke-width="0.5" fill="none"/></svg>`;
+
+            // SVG - Millier
+            let svgThousand = `<svg viewBox="0 -45 126 126" style="width:126px; height:126px;" class="drop-shadow-lg overflow-visible">
+                <polygon points="0,0 40,-40 120,-40 80,0" fill="#fca5a5" stroke="#dc2626" stroke-width="0.5" stroke-linejoin="round"/>
+                <polygon points="80,0 120,-40 120,40 80,80" fill="#dc2626" stroke="#991b1b" stroke-width="0.5" stroke-linejoin="round"/>
+                <rect x="0" y="0" width="80" height="80" fill="#ef4444" stroke="#dc2626" stroke-width="0.5" stroke-linejoin="round"/>
+                <path d="`;
+                for(let i=1; i<10; i++) {
+                    let offset = i*8;
+                    let dX = i*4;
+                    let dY = -i*4;
+                    svgThousand += `M${offset},0 v80 M0,${offset} h80 `;
+                    svgThousand += `M${dX},${dY} h80 M${offset},0 l40,-40 `;
+                    svgThousand += `M80,${offset} l40,-40 M${80+dX},${dY} v80 `;
+                }
+            svgThousand += `" stroke="#dc2626" stroke-width="0.5" fill="none"/></svg>`;
+
+            // Layout
+            let html = `<div class="flex flex-wrap items-end justify-center gap-8 p-4 w-full h-full bg-white overflow-y-auto custom-scrollbar">`;
+
+            if (th > 0) {
+                html += `<div class="relative flex items-end shrink-0" style="width: ${126 + (th-1)*20}px; height: ${126 + (th-1)*20}px;">`;
+                for (let i = 0; i < th; i++) {
+                    let oX = (th - 1 - i) * 20;
+                    let oY = -(th - 1 - i) * 20;
+                    html += `<div class="absolute bottom-0 left-0" style="transform: translate(${oX}px, ${oY}px); z-index: ${i};">${svgThousand}</div>`;
+                }
+                html += `</div>`;
+            }
+
+            if (h > 0) {
+                html += `<div class="relative flex items-end shrink-0" style="width: ${86 + (h-1)*8}px; height: ${86 + (h-1)*8}px;">`;
+                for (let i = 0; i < h; i++) {
+                    let oX = (h - 1 - i) * 8;
+                    let oY = -(h - 1 - i) * 8;
+                    html += `<div class="absolute bottom-0 left-0" style="transform: translate(${oX}px, ${oY}px); z-index: ${i};">${svgHundred}</div>`;
+                }
+                html += `</div>`;
+            }
+
+            if (t > 0) {
+                html += `<div class="flex flex-wrap items-end justify-start gap-1 shrink-0" style="max-width: 100px;">`;
+                for (let i = 0; i < t; i++) html += `<div>${svgTen}</div>`;
+                html += `</div>`;
+            }
+
+            if (u > 0) {
+                html += `<div class="flex flex-wrap items-end justify-start gap-1 shrink-0" style="max-width: 60px;">`;
+                for (let i = 0; i < u; i++) html += `<div>${svgUnit}</div>`;
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        // =====================================================================
+
+        function createCardHTML(id) {
+            let c = cardsData[id];
+            
+            let settingsHtml = `
+                <div class="bg-slate-100 rounded-xl mb-3 flex flex-row justify-between items-center gap-2 border-2 border-slate-200 shadow-sm p-2 flex-wrap shrink-0">
+                    <select onchange="updateCardLevel(${id}, this.value)" class="bg-slate-800 text-white rounded-lg h-9 px-2 font-black outline-none text-sm shadow cursor-pointer">
+                        <option value="CP" ${c.level==='CP'?'selected':''}>CP</option>
+                        <option value="CE1" ${c.level==='CE1'?'selected':''}>CE1</option>
+                        <option value="CE2" ${c.level==='CE2'?'selected':''}>CE2</option>
+                        <option value="CM1" ${c.level==='CM1'?'selected':''}>CM1</option>
+                        <option value="CM2" ${c.level==='CM2'?'selected':''}>CM2</option>
+                    </select>
+                    
+                    <select id="skill-select-${id}" onchange="updateCardSettings(${id}, 'skill', this.value)" class="bg-white border-2 border-indigo-200 text-indigo-900 rounded-lg h-9 px-2 font-bold outline-none text-xs flex-1 cursor-pointer truncate max-w-[150px]">
+                    </select>
+
+                    <select onchange="updateCardSettings(${id}, 'format', this.value)" class="bg-amber-100 border-2 border-amber-300 text-amber-900 rounded-lg h-9 px-2 font-black outline-none text-xs cursor-pointer">
+                        <option value="classique" ${c.format==='classique'?'selected':''}>Classique</option>
+                        <option value="boulier" ${c.format==='boulier'?'selected':''}>Boulier</option>
+                        <option value="blocs" ${c.format==='blocs'?'selected':''}>Blocs</option>
+                    </select>
+
+                    <select id="limit-select-${id}" onchange="updateCardSettings(${id}, 'limit', this.value)" class="bg-white border-2 border-slate-300 rounded-lg h-9 px-2 font-bold text-slate-700 outline-none text-xs cursor-pointer">
+                        <option value="100" ${c.limit==100?'selected':''}>&lt; 100</option>
+                        <option value="1000" ${c.limit==1000?'selected':''}>&lt; 1 000</option>
+                        <option value="10000" ${c.limit==10000?'selected':''}>&lt; 10 000</option>
+                        <option value="100000" ${c.limit==100000?'selected':''}>&lt; 100 000</option>
+                        <option value="1000000" ${c.limit==1000000?'selected':''}>&lt; 1 000 000</option>
+                    </select>
+
+                    <button onclick="genererUnProbleme(${id})" class="bg-slate-300 text-slate-800 h-9 w-9 rounded-lg font-black shadow hover:bg-slate-400 transition" title="Nouveau calcul"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>`;
+
+            return `
+            <div class="perspective-1000 relative w-full flex-1 flex flex-col min-h-[720px] h-full" id="card-container-${id}">
+                <div class="flipper w-full h-full absolute transform-style-3d">
+                    
+                    <!-- FACE AVANT -->
+                    <div class="front absolute w-full h-full bg-white rounded-3xl shadow-xl p-3 md:p-4 border-4 border-slate-200 overflow-hidden flex flex-col">
+                        ${settingsHtml}
+                        
+                        <!-- LIGNE DE CALCUL (Taille dynamique) -->
+                        <div class="bg-slate-900 rounded-xl text-white mb-2 shadow-inner py-4 flex items-center justify-center shrink-0 border-b-4 border-slate-700 min-h-[85px]">
+                            <h2 class="font-bold tracking-widest text-center px-4 w-full whitespace-nowrap overflow-hidden text-ellipsis flex items-center justify-center transition-all duration-300" id="op-display-${id}">---</h2>
+                        </div>
+                        
+                        <!-- WORKSPACE -->
+                        <div class="flex-1 w-full flex items-center justify-center relative overflow-hidden" id="workspace-${id}">
+                            <div id="abacus-render-${id}" class="w-full h-full flex items-center justify-center hidden"></div>
+                        </div>
+
+                        <!-- ZONE REPONSE -->
+                        <div class="shrink-0 flex flex-col items-center mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-slate-200">
+                            <input type="number" id="mental-inp-${id}" placeholder="Réponse..." class="w-full md:w-3/4 h-16 md:h-20 text-center text-4xl md:text-5xl font-black text-slate-900 bg-white border-4 border-slate-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-200 focus:outline-none shadow-inner transition-all">
+                        </div>
+
+                        <!-- ACTION INDIVIDUELLE -->
+                        <div class="flex gap-2 mt-3 shrink-0 w-full">
+                            <button onclick="corriger(${id})" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white text-xl font-black py-3 rounded-xl shadow-lg transition transform hover:-translate-y-1">VÉRIFIER</button>
+                            <button onclick="vider(${id})" class="w-16 md:w-20 bg-white border-2 border-slate-300 text-red-500 hover:bg-red-50 text-xl font-black py-3 rounded-xl shadow transition"><i class="fa-solid fa-eraser"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- FACE ARRIÈRE -->
+                    <div class="back absolute w-full h-full bg-slate-50 rounded-3xl shadow-2xl flex flex-col p-3 md:p-4 border-4 border-slate-200 rotate-y-180 overflow-hidden">
+                        
+                        <div class="flex justify-between items-center mb-3 shrink-0 px-2 border-b-2 border-slate-200 pb-2">
+                            <h3 class="font-black text-2xl text-slate-800 uppercase tracking-widest">Correction</h3>
+                            <div id="correction-badge-${id}" class="px-6 py-2 rounded-xl font-black text-sm shadow text-white tracking-widest"></div>
+                        </div>
+
+                        <!-- CALCUL CENTRAL (Taille dynamique) -->
+                        <div class="shrink-0 flex items-center justify-center my-3 w-full z-20 relative">
+                            <div id="correct-eq-${id}" class="w-full text-center flex flex-col justify-center items-center gap-y-3 bg-white p-5 md:p-6 rounded-3xl shadow-md border-2 border-slate-200 font-bold transition-all duration-300"></div>
+                        </div>
+
+                        <!-- BOULIER/BLOCS CORRECTION -->
+                        <div class="flex-1 w-full flex items-center justify-center relative overflow-hidden pb-2 -mt-2 z-10">
+                            <div id="correct-abacus-${id}" class="w-full h-full flex items-center justify-center hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function updateCardLevel(id, newLevel) {
+            cardsData[id].level = newLevel;
+            cardsData[id].skill = SKILLS[newLevel][0].id;
+            
+            // Adapter la limite de base
+            let newLimit = LIMITS_PER_LEVEL[newLevel] || 1000;
+            cardsData[id].limit = newLimit;
+            let limitSelect = document.getElementById(`limit-select-${id}`);
+            if(limitSelect) limitSelect.value = newLimit;
+
+            updateSkillSelectUI(id);
+            genererUnProbleme(id);
+        }
+
+        function updateSkillSelectUI(id) {
+            let select = document.getElementById(`skill-select-${id}`);
+            if(!select) return;
+            let lvl = cardsData[id].level;
+            select.innerHTML = '';
+            SKILLS[lvl].forEach(s => {
+                let opt = document.createElement('option');
+                opt.value = s.id;
+                opt.innerText = s.name;
+                if(cardsData[id].skill === s.id) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        function updateCardSettings(id, key, value) {
+            if(key === 'limit') value = parseInt(value);
+            cardsData[id][key] = value;
+            genererUnProbleme(id);
+        }
+
+        function initAllGames() {
+            for(let i=0; i<globalState.playersCount; i++) genererUnProbleme(i);
+        }
+
+        function getRandomInt(min, max) { 
+            min = Math.ceil(min); max = Math.floor(max);
+            if(min > max) { let t=min; min=max; max=t; }
+            return Math.floor(Math.random() * (max - min + 1)) + min; 
+        }
+        function getOpSym(op) { return op === '*' ? 'x' : (op === '/' ? '÷' : op); }
+        function fmtNum(n) { return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+
+        // --- GÉNÉRATEUR INTELLIGENT ---
+        function genererUnProbleme(id) {
+            let c = cardsData[id];
+            let max = parseInt(c.limit);
+            let skill = c.skill;
+            
+            c.op = '+'; c.n1 = 0; c.n2 = 0; c.ans = 0; 
+            c.subtype = null; 
+
+            switch(skill) {
+                case 'add_sub_5':
+                    c.op = Math.random() > 0.5 ? '+' : '-';
+                    c.n2 = 5;
+                    if (c.op === '+') { c.n1 = getRandomInt(0, max - c.n2); }
+                    else { c.n1 = getRandomInt(c.n2, max); }
+                    c.ans = c.op === '+' ? c.n1 + c.n2 : c.n1 - c.n2;
+                    break;
+                    
+                case 'add_8_9_cp':
+                    c.op = '+';
+                    c.n2 = getRandomInt(8, 9);
+                    c.n1 = getRandomInt(0, max - c.n2);
+                    c.ans = c.n1 + c.n2;
+                    break;
+                    
+                case 'somme_simple_cp':
+                    c.op = '+';
+                    c.n1 = getRandomInt(1, 9);
+                    c.n2 = getRandomInt(1, Math.min(49, max - c.n1));
+                    if(Math.random() > 0.5) [c.n1, c.n2] = [c.n2, c.n1];
+                    c.ans = c.n1 + c.n2;
+                    break;
+                    
+                case 'tables_add_sub_cp':
+                case 'tables_add_sub_ce1':
+                case 'tables_add_sub_ce2':
+                case 'tables_add_sub_cm1':
+                case 'tables_add_sub_cm2':
+                    if (skill === 'tables_add_sub_cp') c.op = '+';
+                    else c.op = Math.random() > 0.5 ? '+' : '-';
+                    
+                    c.n1 = getRandomInt(1, max);
+                    c.n2 = getRandomInt(1, max);
+                    if(c.op === '+') {
+                        if(c.n1 + c.n2 > max) { c.n1 = Math.floor(max/2); c.n2 = getRandomInt(1, Math.floor(max/2)); }
+                        c.ans = c.n1 + c.n2;
+                    } else {
+                        if(c.n1 < c.n2) [c.n1, c.n2] = [c.n2, c.n1];
+                        c.ans = c.n1 - c.n2;
+                    }
+                    break;
+
+                case 'add_sub_10_100':
+                case 'add_sub_10_100_1000':
+                case 'add_sub_10k_100k':
+                case 'add_sub_10k_100k_1m':
+                    c.op = Math.random() > 0.5 ? '+' : '-';
+                    let steps = [10, 100, 1000, 10000, 100000, 1000000];
+                    let allowed = steps.filter(s => s <= max);
+                    if (skill === 'add_sub_10_100') allowed = [10, 100];
+                    if (skill === 'add_sub_10_100_1000') allowed = [10, 100, 1000];
+                    if (skill === 'add_sub_10k_100k') allowed = [10000, 100000];
+                    if (skill === 'add_sub_10k_100k_1m') allowed = [10000, 100000, 1000000];
+                    allowed = allowed.filter(s => s <= max);
+                    if(allowed.length === 0) allowed = [max > 0 ? max : 10];
+                    
+                    c.n2 = allowed[Math.floor(Math.random() * allowed.length)];
+                    
+                    if(c.op === '+') { c.n1 = getRandomInt(1, max - c.n2); }
+                    else { c.n1 = getRandomInt(c.n2, max); }
+                    c.ans = c.op === '+' ? c.n1 + c.n2 : c.n1 - c.n2;
+                    break;
+
+                case 'add_sub_8_9_fin':
+                    c.op = Math.random() > 0.5 ? '+' : '-';
+                    let maxBase = Math.floor(max / 10) - 1;
+                    if(maxBase < 0) maxBase = 0;
+                    let base = getRandomInt(0, Math.min(maxBase, 100));
+                    c.n2 = base * 10 + (Math.random() > 0.5 ? 8 : 9);
+                    if(c.n2 > max) c.n2 = 8;
+                    
+                    if(c.op === '+') { c.n1 = getRandomInt(1, max - c.n2); }
+                    else { c.n1 = getRandomInt(c.n2, max); }
+                    c.ans = c.op === '+' ? c.n1 + c.n2 : c.n1 - c.n2;
+                    break;
+
+                case 'comp_10':
+                case 'comp_10_100':
+                case 'comp_10_100_1000':
+                case 'comp_10k_100k':
+                case 'comp_10k_100k_1m':
+                    c.op = '+';
+                    c.ans = max; 
+                    c.n1 = getRandomInt(1, max - 1);
+                    c.n2 = max - c.n1;
+                    break;
+
+                case 'doubles_moities':
+                    let isDouble = Math.random() > 0.5;
+                    c.subtype = isDouble ? 'double' : 'moitie';
+                    c.op = isDouble ? 'x' : '÷';
+                    if (isDouble) {
+                        c.n1 = getRandomInt(1, Math.floor(max / 2));
+                        c.ans = c.n1 * 2;
+                    } else {
+                        c.n1 = getRandomInt(1, Math.floor(max / 2)) * 2;
+                        c.ans = c.n1 / 2;
+                    }
+                    break;
+
+                case 'mult_1_5':
+                case 'mult_6_10':
+                case 'mult_1_10':
+                case 'mult_11_12':
+                case 'mult_1_12':
+                    c.op = 'x';
+                    if(skill === 'mult_1_5') c.n2 = getRandomInt(1, 5);
+                    else if(skill === 'mult_6_10') c.n2 = getRandomInt(6, 10);
+                    else if(skill === 'mult_1_10') c.n2 = getRandomInt(1, 10);
+                    else if(skill === 'mult_11_12') c.n2 = getRandomInt(11, 12);
+                    else if(skill === 'mult_1_12') c.n2 = getRandomInt(1, 12);
+                    
+                    let maxN1 = Math.floor(max / c.n2);
+                    if(maxN1 < 1) maxN1 = 1;
+                    c.n1 = getRandomInt(2, Math.min(maxN1, 100)); 
+                    if(Math.random() > 0.5) [c.n1, c.n2] = [c.n2, c.n1];
+                    c.ans = c.n1 * c.n2;
+                    break;
+
+                case 'mult_10':
+                case 'mult_10_100_1000':
+                case 'mult_1k_10k':
+                case 'mult_10k_100k_1m':
+                    c.op = 'x';
+                    let m_opts = [10];
+                    if(skill === 'mult_10_100_1000') m_opts = [10, 100, 1000];
+                    if(skill === 'mult_1k_10k') m_opts = [1000, 10000];
+                    if(skill === 'mult_10k_100k_1m') m_opts = [10000, 100000, 1000000];
+                    
+                    let v_opts = m_opts.filter(m => m <= max);
+                    if(v_opts.length === 0) v_opts = [10];
+                    c.n2 = v_opts[Math.floor(Math.random() * v_opts.length)];
+                    let possibleN1 = Math.floor(max / c.n2);
+                    if (possibleN1 < 1) possibleN1 = 1;
+                    c.n1 = getRandomInt(2, possibleN1);
+                    if(Math.random() > 0.5) [c.n1, c.n2] = [c.n2, c.n1];
+                    c.ans = c.n1 * c.n2;
+                    break;
+
+                case 'mult_end_0':
+                    c.op = 'x';
+                    let mag = Math.floor(Math.log10(max)) - 1;
+                    if (mag < 1) mag = 1;
+                    let z = getRandomInt(1, mag);
+                    c.n2 = getRandomInt(1, 9) * Math.pow(10, z);
+                    if(c.n2 > max) c.n2 = 10;
+                    c.n1 = getRandomInt(2, Math.max(2, Math.floor(max / c.n2)));
+                    if(Math.random() > 0.5) [c.n1, c.n2] = [c.n2, c.n1];
+                    c.ans = c.n1 * c.n2;
+                    break;
+
+                case 'mult_decomp':
+                    c.op = 'x';
+                    c.n2 = getRandomInt(2, Math.min(12, Math.floor(Math.sqrt(max))));
+                    c.n1 = getRandomInt(11, Math.floor(max / c.n2));
+                    if(c.n1 < 10) c.n1 = getRandomInt(11, 99); 
+                    c.ans = c.n1 * c.n2;
+                    break;
+
+                default: 
+                    c.op = '+'; c.ans = getRandomInt(10, max); c.n1 = getRandomInt(1, c.ans-1); c.n2 = c.ans - c.n1;
+            }
+
+            // --- AFFICHAGE DE LA LIGNE (Avec logique Complément modifiée) ---
+            let htmlSym = `<span class="text-amber-400 mx-2">${getOpSym(c.op)}</span>`;
+            let htmlEq = `<span class="text-slate-400 ml-2">=</span>`;
+            
+            if (skill === 'doubles_moities') {
+                let typeText = c.subtype === 'double' ? 'Double de' : 'Moitié de';
+                if (c.format === 'classique') {
+                    c.display = `<span class="text-slate-400 mr-3">${typeText}</span><span class="text-white">${fmtNum(c.n1)}</span>`;
+                } else {
+                    c.display = `<span class="text-slate-400 mr-3">${typeText}</span><span class="text-slate-400 border-b-4 border-slate-500 pb-1 px-2">...</span>`;
+                }
+                c.expected = c.ans;
+            } else if (c.format === 'classique') {
+                if(skill.startsWith('comp_')) {
+                    c.display = `${fmtNum(c.n1)} ${htmlSym} <span class="text-emerald-400">...</span> ${htmlEq} <span class="text-slate-100 ml-2">${fmtNum(c.ans)}</span>`;
+                    c.expected = c.n2;
+                } else {
+                    c.display = `${fmtNum(c.n1)} ${htmlSym} ${fmtNum(c.n2)} ${htmlEq}`;
+                    c.expected = c.ans;
+                }
+            } else {
+                // Format Boulier / Blocs
+                if(skill.startsWith('comp_')) {
+                    // Visuel = c.n1. On cherche c.n2. Target = c.ans
+                    c.display = `<span class="text-slate-400 border-b-4 border-slate-500 pb-1 px-2">...</span> ${htmlSym} <span class="text-emerald-400">...</span> ${htmlEq} <span class="text-slate-100 ml-2">${fmtNum(c.ans)}</span>`;
+                    c.expected = c.n2;
+                } else {
+                    c.display = `<span class="text-slate-400 border-b-4 border-slate-500 pb-1 px-2">...</span> ${htmlSym} ${fmtNum(c.n2)} ${htmlEq}`;
+                    c.expected = c.ans; 
+                }
+            }
+            
+            afficherBandeau(id);
+            vider(id); 
+        }
+
+        function afficherBandeau(id) {
+            let c = cardsData[id];
+            let displayEl = document.getElementById(`op-display-${id}`);
+            displayEl.innerHTML = c.display;
+
+            // AUTO-SCALING DE LA POLICE DU RECTO
+            let maxNum = Math.max(c.n1 || 0, c.n2 || 0, c.ans || 0);
+            displayEl.classList.remove('text-4xl', 'md:text-5xl', 'text-3xl', 'md:text-4xl', 'text-2xl', 'md:text-3xl');
+            
+            if (maxNum < 1000) {
+                displayEl.classList.add('text-4xl', 'md:text-5xl');
+            } else if (maxNum < 100000) {
+                displayEl.classList.add('text-3xl', 'md:text-4xl');
+            } else {
+                displayEl.classList.add('text-2xl', 'md:text-3xl');
+            }
+
+            let abacusDiv = document.getElementById(`abacus-render-${id}`);
+            if (c.format === 'boulier') {
+                abacusDiv.innerHTML = renderAbacusSVG(c.n1, c.limit);
+                abacusDiv.classList.remove('hidden');
+            } else if (c.format === 'blocs') {
+                abacusDiv.innerHTML = renderBlocksHTML(c.n1);
+                abacusDiv.classList.remove('hidden');
+            } else {
+                abacusDiv.innerHTML = '';
+                abacusDiv.classList.add('hidden');
+            }
+        }
+
+        function vider(id) { 
+            let inp = document.getElementById(`mental-inp-${id}`);
+            inp.value = ''; 
+            inp.classList.remove('text-red-600', 'border-red-500', 'text-emerald-600', 'border-emerald-500', 'bg-red-50', 'bg-emerald-50');
+            inp.classList.add('text-slate-900', 'border-slate-300', 'bg-white');
+        }
+
+        // --- VERIFICATION ET VERSO PARFAIT ---
+        function corriger(id) {
+            let c = cardsData[id];
+            let inp = document.getElementById(`mental-inp-${id}`);
+            let userVal = parseInt(inp.value);
+            let isCorrect = (userVal === c.expected);
+            
+            inp.classList.remove('text-slate-900', 'border-slate-300', 'bg-white', 'text-red-600', 'border-red-500', 'text-emerald-600', 'border-emerald-500', 'bg-red-50', 'bg-emerald-50');
+
+            if (!isCorrect) inp.classList.add('text-red-600', 'border-red-500', 'bg-red-50');
+            else inp.classList.add('text-emerald-600', 'border-emerald-500', 'bg-emerald-50');
+
+            let badge = document.getElementById(`correction-badge-${id}`);
+            if(isCorrect) {
+                badge.className = "px-6 py-2 rounded-xl font-black text-sm shadow bg-emerald-500 text-white border-b-4 border-emerald-700 tracking-widest";
+                badge.innerHTML = `<i class="fa-solid fa-check mr-2"></i>BRAVO`;
+            } else {
+                badge.className = "px-6 py-2 rounded-xl font-black text-sm shadow bg-red-500 text-white border-b-4 border-red-700 tracking-widest";
+                badge.innerHTML = `<i class="fa-solid fa-xmark mr-2"></i>ERREUR`;
+            }
+            
+            // --- Construction du verso avec Auto-Scaling de la police ---
+            let backEq = document.getElementById(`correct-eq-${id}`);
+            let maxNum = Math.max(c.n1 || 0, c.n2 || 0, c.ans || 0);
+            backEq.classList.remove('text-2xl', 'md:text-3xl', 'text-3xl', 'md:text-4xl', 'text-4xl', 'md:text-5xl');
+            
+            if (maxNum < 1000) {
+                backEq.classList.add('text-4xl', 'md:text-5xl');
+            } else if (maxNum < 100000) {
+                backEq.classList.add('text-3xl', 'md:text-4xl');
+            } else {
+                backEq.classList.add('text-2xl', 'md:text-3xl');
+            }
+
+            if (c.skill === 'doubles_moities') {
+                let typeText = c.subtype === 'double' ? 'Double de' : 'Moitié de';
+                backEq.innerHTML = `<div class="flex items-center justify-center flex-wrap w-full">
+                    <span class="text-slate-500 mr-4">${typeText}</span>
+                    <span class="text-slate-900">${fmtNum(c.n1)}</span>
+                    <span class="text-slate-500 mx-4">=</span>
+                    <span class="text-emerald-500">${fmtNum(c.expected)}</span>
+                </div>`;
+            } else {
+                let symStr = `<span class="text-slate-500 px-2">${getOpSym(c.op)}</span>`;
+                let eqStr = `<span class="text-slate-500 px-2">=</span>`;
+                let n1Str, n2Str, ansStr;
+                
+                if (c.format === 'boulier' || c.format === 'blocs') {
+                    n1Str = `<span class="text-slate-900">${fmtNum(c.n1)}</span>`; 
+                    if (c.skill.startsWith('comp_')) {
+                        n2Str = `<span class="text-emerald-500">${fmtNum(c.n2)}</span>`; 
+                        ansStr = `<span class="text-slate-500">${fmtNum(c.ans)}</span>`;
+                    } else {
+                        n2Str = `<span class="text-slate-500">${fmtNum(c.n2)}</span>`; 
+                        ansStr = `<span class="text-emerald-500">${fmtNum(c.ans)}</span>`; 
+                    }
+                } else if (c.skill.startsWith('comp_')) {
+                    n1Str = `<span class="text-slate-500">${fmtNum(c.n1)}</span>`; 
+                    n2Str = `<span class="text-emerald-500">${fmtNum(c.n2)}</span>`; 
+                    ansStr = `<span class="text-slate-500">${fmtNum(c.ans)}</span>`; 
+                } else {
+                    n1Str = `<span class="text-slate-500">${fmtNum(c.n1)}</span>`;
+                    n2Str = `<span class="text-slate-500">${fmtNum(c.n2)}</span>`;
+                    ansStr = `<span class="text-emerald-500">${fmtNum(c.ans)}</span>`;
+                }
+                
+                if (c.skill.startsWith('mult_decomp')) {
+                    let t1 = Math.floor(c.n1 / 10) * 10;
+                    let u1 = c.n1 % 10;
+                    backEq.innerHTML = `
+                        <div class="flex items-center w-full justify-center">${n1Str} ${symStr} ${n2Str}</div>
+                        <div class="flex items-center w-full justify-center my-1"><span class="text-slate-500">${t1}</span> ${symStr} ${n2Str} <span class="text-slate-500 px-2">+</span> <span class="text-slate-500">${u1}</span> ${symStr} ${n2Str}</div>
+                        <div class="flex items-center w-full justify-center mb-1"><span class="text-slate-500">${t1 * c.n2}</span> <span class="text-slate-500 px-2">+</span> <span class="text-slate-500">${u1 * c.n2}</span></div>
+                        <div class="flex items-center w-full justify-center">${eqStr} ${ansStr}</div>
+                    `;
+                } else {
+                    backEq.innerHTML = `<div class="flex items-center justify-center flex-wrap w-full">${n1Str} ${symStr} ${n2Str} ${eqStr} ${ansStr}</div>`;
+                }
+            }
+
+            // Visuels au verso
+            let backAbacus = document.getElementById(`correct-abacus-${id}`);
+            if (c.format === 'boulier') {
+                backAbacus.innerHTML = renderAbacusSVG(c.n1, c.limit);
+                backAbacus.classList.remove('hidden');
+            } else if (c.format === 'blocs') {
+                backAbacus.innerHTML = renderBlocksHTML(c.n1);
+                backAbacus.classList.remove('hidden');
+            } else {
+                backAbacus.innerHTML = '';
+                backAbacus.classList.add('hidden');
+            }
+            
+            document.getElementById(`card-container-${id}`).classList.add('flipped');
+        }
+
+        function retourner(id) {
+            document.getElementById(`card-container-${id}`).classList.remove('flipped');
+            setTimeout(() => { genererUnProbleme(id); }, 400); 
+        }
+    </script>
+</body>
+</html>
