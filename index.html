@@ -117,61 +117,63 @@
     </main>
 
     <script>
-        // --- DICTIONNAIRE DES COMPÉTENCES ---
+        // --- DICTIONNAIRE DES COMPÉTENCES (Identifiants Unifiés Corrigés) ---
         const SKILLS = {
             'CP': [
-                {id: 'add_sub_5', name: 'Ajouter ou soustraire 5'},
-                {id: 'tables_add_sub_cp', name: 'Tables d\'additions'},
-                {id: 'add_8_9_cp', name: 'Ajouter 8 ou 9'},
-                {id: 'comp_10', name: 'Compléments à 10'},
-                {id: 'doubles_moities', name: 'Doubles et moitiés'},
-                {id: 'somme_simple_cp', name: 'Somme simple < 10 et < 50'}
+                {id: 'cp_add_sub_5', name: 'Ajouter ou soustraire 5'},
+                {id: 'cp_tables_add_sub', name: 'Tables d\'additions'},
+                {id: 'cp_add_8_9', name: 'Ajouter 8 ou 9'},
+                {id: 'cp_comp_limit', name: 'Compléments à 10'},
+                {id: 'cp_doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'cp_somme_simple', name: 'Somme simple < 10 et < 50'},
+                {id: 'cp_mult_tables', name: 'Tables de multiplication (1, 2, 4, 10)'},
+                {id: 'cp_mult_10', name: 'Multiplier par 10'}
             ],
             'CE1': [
-                {id: 'add_sub_10_100', name: 'Ajouter ou soustraire 10, 100'},
-                {id: 'tables_add_sub_ce1', name: 'Tables additions et soustractions'},
-                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
-                {id: 'comp_10_100', name: 'Compléments à 10, 100'},
-                {id: 'mult_1_5', name: 'Tables de multiplication x1 à x5'},
-                {id: 'doubles_moities', name: 'Doubles et moitiés'},
-                {id: 'mult_10', name: 'Multiplier par 10'},
-                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
-                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+                {id: 'ce1_add_sub_10_100', name: 'Ajouter ou soustraire 10, 100'},
+                {id: 'ce1_tables_add_sub', name: 'Tables additions et soustractions'},
+                {id: 'ce1_add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'ce1_comp_limit', name: 'Compléments à 10, 100'},
+                {id: 'ce1_mult_1_5', name: 'Tables de multiplication x1 à x5'},
+                {id: 'ce1_doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'ce1_mult_10_100', name: 'Multiplier par 10, 100'},
+                {id: 'ce1_mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'ce1_mult_decomp', name: 'Calculer un produit en le décomposant'}
             ],
             'CE2': [
-                {id: 'add_sub_10_100_1000', name: 'Ajouter ou soustraire 10, 100, 1000'},
-                {id: 'tables_add_sub_ce2', name: 'Consolider tables additions et soustractions'},
-                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
-                {id: 'comp_100_1000', name: 'Compléments à 100, 1000'},
-                {id: 'mult_1_5', name: 'Consolider tables de multiplication x1 à x5'},
-                {id: 'mult_6_10', name: 'Construire tables de multiplication x6 à x10'},
-                {id: 'doubles_moities', name: 'Doubles et moitiés'},
-                {id: 'mult_10_100_1000', name: 'Multiplier par 10, 100, 1000'},
-                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
-                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+                {id: 'ce2_add_sub_10_100_1000', name: 'Ajouter ou soustraire 10, 100, 1000'},
+                {id: 'ce2_tables_add_sub', name: 'Consolider tables additions et soustractions'},
+                {id: 'ce2_add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'ce2_comp_limit', name: 'Compléments à 100, 1000'},
+                {id: 'ce2_mult_1_5', name: 'Consolider tables de multiplication x1 à x5'},
+                {id: 'ce2_mult_6_10', name: 'Construire tables de multiplication x6 à x10'},
+                {id: 'ce2_doubles_moities', name: 'Doubles et moitiés'},
+                {id: 'ce2_mult_10_100_1000', name: 'Multiplier par 10, 100, 1000'},
+                {id: 'ce2_mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'ce2_mult_decomp', name: 'Calculer un produit en le décomposant'}
             ],
             'CM1': [
-                {id: 'add_sub_10k_100k', name: '+ ou - 10 000, 100 000'},
-                {id: 'tables_add_sub_cm1', name: 'Réviser tables additions et soustractions'},
-                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
-                {id: 'comp_10k_100k', name: 'Compléments à 10 000, 100 000'},
-                {id: 'mult_1_10', name: 'Consolider tables de multiplication x1 à x10'},
-                {id: 'mult_11_12', name: 'Construire tables de multiplication x11 à x12'},
-                {id: 'doubles_moities', name: 'Doubles et moitiés'},
-                {id: 'mult_1k_10k', name: 'Multiplier par 1 000, 10 000'},
-                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
-                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+                {id: 'cm1_add_sub_10k_100k', name: '+ ou - 10 000, 100 000'},
+                {id: 'cm1_tables_add_sub', name: 'Réviser tables additions et soustractions'},
+                {id: 'cm1_add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'cm1_comp_limit', name: 'Compléments à 10 000, 100 000'},
+                {id: 'cm1_mult_1_10', name: 'Consolider tables de multiplication x1 à x10'},
+                {id: 'cm1_mult_11_12', name: 'Construire tables de multiplication x11 à x12'},
+                {id: 'cm1_doubles_moities', name: 'Doubles et moitiés complexes'},
+                {id: 'cm1_mult_1k_10k', name: 'Multiplier par 1 000, 10 000'},
+                {id: 'cm1_mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'cm1_mult_decomp', name: 'Calculer un produit en le décomposant'}
             ],
             'CM2': [
-                {id: 'add_sub_10k_100k_1m', name: '+ ou - 10k, 100k, 1 000 000'},
-                {id: 'tables_add_sub_cm2', name: 'Réviser tables additions et soustractions'},
-                {id: 'add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
-                {id: 'comp_10k_100k_1m', name: 'Compléments à 10k, 100k, 1 000 000'},
-                {id: 'mult_1_12', name: 'Consolider tables de multiplication x1 à x12'},
-                {id: 'doubles_moities', name: 'Doubles et moitiés'},
-                {id: 'mult_10k_100k_1m', name: 'Multiplier par 10k, 100k, 1 000 000'},
-                {id: 'mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
-                {id: 'mult_decomp', name: 'Calculer un produit en le décomposant'}
+                {id: 'cm2_add_sub_10k_100k_1m', name: '+ ou - 10k, 100k, 1 000 000'},
+                {id: 'cm2_tables_add_sub', name: 'Réviser tables additions et soustractions'},
+                {id: 'cm2_add_sub_8_9_fin', name: '+ ou - de nombres terminant par 8 ou 9'},
+                {id: 'cm2_comp_limit', name: 'Compléments à 10k, 100k, 1 000 000'},
+                {id: 'cm2_mult_1_12', name: 'Consolider tables de multiplication x1 à x12'},
+                {id: 'cm2_doubles_moities', name: 'Doubles et moitiés (Grands nombres)'},
+                {id: 'cm2_mult_10k_100k_1m', name: 'Multiplier par 10k, 100k, 1 000 000'},
+                {id: 'cm2_mult_end_0', name: 'Multiplier par un nombre se terminant par 0'},
+                {id: 'cm2_mult_decomp', name: 'Calculer un produit en le décomposant'}
             ]
         };
 
@@ -275,7 +277,10 @@
             container.innerHTML = '';
             for(let i=0; i<count; i++) container.innerHTML += createCardHTML(i);
             
-            for(let i=0; i<count; i++) updateSkillSelectUI(i);
+            for(let i=0; i<count; i++) {
+                updateSkillSelectUI(i);
+                updateCardSettings(i, 'skill', cardsData[i].skill); // force UI refresh
+            }
             
             globalState.isGlobalFlipped = false;
             let btn = document.getElementById('btn-verify-all');
@@ -288,7 +293,7 @@
         }
 
         // =====================================================================
-        // === MOTEUR SVG DU BOULIER (MODELE SOROBAN MODERNE CORRIGÉ) ===
+        // === MOTEUR SVG DU BOULIER (MODELE SOROBAN EXPERT SANS DEFS) ===
         // =====================================================================
         function renderAbacusSVG(numStr, limit) {
             let rodCount = 2; 
@@ -301,47 +306,51 @@
             let str = numStr.toString().padStart(rodCount, '0');
             if (str.length > rodCount) rodCount = str.length;
 
-            let r = 15; 
+            let r = 18; 
             let d = r * 2; 
-            let rodSpacing = 40; 
+            let rodSpacing = 60; 
             let padding = 30; 
             let w = (rodCount - 1) * rodSpacing + padding * 2;
-            let h = 220; 
-            let beamY = 70; 
-            let beamHeight = 10;
+            let h = 350; 
+            let beamY = 100; 
             
-            let svg = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%; max-height: 250px; background: white; border-radius:12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">`;
+            let svg = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" style="width:100%; height:100%; min-height:280px; background:#ffffff; border-radius:12px;">`;
             
-            // Barre centrale
-            svg += `<rect x="0" y="${beamY}" width="${w}" height="${beamHeight}" fill="#334155" rx="2"/>`;
+            svg += `<rect x="0" y="${beamY - 5}" width="${w}" height="10" fill="#334155" rx="2"/>`;
+
+            const getBead = (cx, cy, color) => {
+                let baseC = color === 'red' ? '#ef4444' : '#3b82f6';
+                let strkC = color === 'red' ? '#b91c1c' : '#1d4ed8';
+                return `
+                    <circle cx="${cx}" cy="${cy+3}" r="${r}" fill="rgba(0,0,0,0.2)"/>
+                    <circle cx="${cx}" cy="${cy}" r="${r}" fill="${baseC}" stroke="${strkC}" stroke-width="2"/>
+                    <ellipse cx="${cx}" cy="${cy-r/2}" rx="${r/2}" ry="${r/4}" fill="rgba(255,255,255,0.4)"/>
+                `;
+            };
 
             for(let i=0; i<rodCount; i++) {
                 let cx = padding + i * rodSpacing; 
-                
-                // Tige métallique
-                svg += `<line x1="${cx}" y1="0" x2="${cx}" y2="${h}" stroke="#9ca3af" stroke-width="6"/>`;
+                svg += `<line x1="${cx}" y1="16" x2="${cx}" y2="${h-16}" stroke="#94a3b8" stroke-width="6" stroke-linecap="round"/>`;
 
                 let val = parseInt(str[i]);
-                let topVal = val >= 5 ? 1 : 0; 
+                let topVal = Math.floor(val / 5); 
                 let botVal = val % 5;             
 
-                // --- BILLE ROUGE QUINAIRE (HAUT - Valeur 5) ---
-                let rTopRest = r + 4; 
-                let rTopActive = beamY - r - 2; 
-                let cyTop = topVal > 0 ? rTopActive : rTopRest;
-                svg += `<circle cx="${cx}" cy="${cyTop}" r="${r}" fill="#ef4444" stroke="#b91c1c" stroke-width="2"/>`;
+                let r0Y = 22; 
+                let r1Y_rest = 62; 
+                let r1Y_active = beamY - 5 - r - 2; 
+                
+                svg += getBead(cx, r0Y, 'red');
+                svg += getBead(cx, topVal > 0 ? r1Y_active : r1Y_rest, 'red');
 
-                // --- BILLES BLEUES LUNAIRES (BAS - 4 BILLES - Valeur 1) ---
-                for(let b=0; b<4; b++) {
-                    let cyBot;
+                for(let b=0; b<5; b++) {
+                    let cy;
                     if (b < botVal) {
-                        // Activée : Remonte contre la barre
-                        cyBot = (beamY + beamHeight) + r + 2 + b * (d + 2); 
+                        cy = (beamY + 5) + r + 2 + b * (d + 2); 
                     } else {
-                        // Repos : Descend vers le bas du cadre
-                        cyBot = (h - r - 4) - (3 - b) * (d + 2);   
+                        cy = (h - r - 4) - (4 - b) * (d + 2);   
                     }
-                    svg += `<circle cx="${cx}" cy="${cyBot}" r="${r}" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2"/>`;
+                    svg += getBead(cx, cy, 'blue');
                 }
             }
             svg += `</svg>`;
@@ -349,13 +358,13 @@
         }
 
         // =====================================================================
-        // === MOTEUR RENDU BLOCS BASE 10 (CP/CE1) ===
+        // === MOTEUR RENDU BLOCS BASE 10 - ISOMÉTRIE PARFAITE + AUTO SCALING ===
         // =====================================================================
         function renderBlocksHTML(num) {
             if (num > 5000) {
                 return `<div class="flex items-center justify-center w-full h-full p-4 text-center">
                             <span class="text-xl md:text-2xl font-black text-white bg-red-500 px-6 py-4 rounded-xl border-4 border-red-700 shadow-lg">
-                                <i class="fa-solid fa-eye-slash mr-2"></i>Limite visuelle (max 5000)
+                                <i class="fa-solid fa-eye-slash mr-2"></i>Nombre trop grand pour les blocs
                             </span>
                         </div>`;
             }
@@ -366,87 +375,117 @@
             let t = parseInt(str[str.length - 2]) || 0;
             let u = parseInt(str[str.length - 1]) || 0;
 
-            // SVG - Unité
-            let svgUnit = `<svg viewBox="0 -5 14 14" style="width:16px; height:16px;" class="drop-shadow-sm overflow-visible">
+            // Définition géométrique pure pour les faces isométriques
+            let svgUnit = `
                 <polygon points="0,0 4,-4 12,-4 8,0" fill="#fde047" stroke="#ca8a04" stroke-width="0.5" stroke-linejoin="round"/>
                 <polygon points="8,0 12,-4 12,4 8,8" fill="#ca8a04" stroke="#a16207" stroke-width="0.5" stroke-linejoin="round"/>
                 <rect x="0" y="0" width="8" height="8" fill="#eab308" stroke="#ca8a04" stroke-width="0.5" stroke-linejoin="round"/>
-            </svg>`;
+            `;
 
-            // SVG - Dizaine
-            let svgTen = `<svg viewBox="0 -5 14 86" style="width:16px; height:86px;" class="drop-shadow-sm overflow-visible">
+            let svgTen = `
                 <polygon points="0,0 4,-4 12,-4 8,0" fill="#93c5fd" stroke="#2563eb" stroke-width="0.5" stroke-linejoin="round"/>
                 <polygon points="8,0 12,-4 12,76 8,80" fill="#2563eb" stroke="#1e40af" stroke-width="0.5" stroke-linejoin="round"/>
                 <rect x="0" y="0" width="8" height="80" fill="#3b82f6" stroke="#2563eb" stroke-width="0.5" stroke-linejoin="round"/>
-                <path d="`;
-                for(let i=1; i<10; i++) svgTen += `M0,${i*8} h8 l4,-4 `;
-            svgTen += `" stroke="#2563eb" stroke-width="0.5" fill="none"/></svg>`;
+                <path d="M0,8 h8 l4,-4 M0,16 h8 l4,-4 M0,24 h8 l4,-4 M0,32 h8 l4,-4 M0,40 h8 l4,-4 M0,48 h8 l4,-4 M0,56 h8 l4,-4 M0,64 h8 l4,-4 M0,72 h8 l4,-4" stroke="#2563eb" stroke-width="0.5" fill="none"/>
+            `;
 
-            // SVG - Centaine
-            let svgHundred = `<svg viewBox="0 -5 86 86" style="width:86px; height:86px;" class="drop-shadow-md overflow-visible">
+            let svgHundred = `
                 <polygon points="0,0 4,-4 84,-4 80,0" fill="#86efac" stroke="#16a34a" stroke-width="0.5" stroke-linejoin="round"/>
                 <polygon points="80,0 84,-4 84,76 80,80" fill="#16a34a" stroke="#15803d" stroke-width="0.5" stroke-linejoin="round"/>
                 <rect x="0" y="0" width="80" height="80" fill="#22c55e" stroke="#16a34a" stroke-width="0.5" stroke-linejoin="round"/>
-                <path d="`;
-                for(let i=1; i<10; i++) {
-                    let p = i*8;
-                    svgHundred += `M${p},0 v80 M${p},0 l4,-4 M0,${p} h80 M80,${p} l4,-4 `;
-                }
-            svgHundred += `" stroke="#16a34a" stroke-width="0.5" fill="none"/></svg>`;
+                <path d="M8,0 v80 M8,0 l4,-4 M0,8 h80 M80,8 l4,-4 M16,0 v80 M16,0 l4,-4 M0,16 h80 M80,16 l4,-4 M24,0 v80 M24,0 l4,-4 M0,24 h80 M80,24 l4,-4 M32,0 v80 M32,0 l4,-4 M0,32 h80 M80,32 l4,-4 M40,0 v80 M40,0 l4,-4 M0,40 h80 M80,40 l4,-4 M48,0 v80 M48,0 l4,-4 M0,48 h80 M80,48 l4,-4 M56,0 v80 M56,0 l4,-4 M0,56 h80 M80,56 l4,-4 M64,0 v80 M64,0 l4,-4 M0,64 h80 M80,64 l4,-4 M72,0 v80 M72,0 l4,-4 M0,72 h80 M80,72 l4,-4" stroke="#16a34a" stroke-width="0.5" fill="none"/>
+            `;
 
-            // SVG - Millier
-            let svgThousand = `<svg viewBox="0 -45 126 126" style="width:126px; height:126px;" class="drop-shadow-lg overflow-visible">
+            let svgThousand = `
                 <polygon points="0,0 40,-40 120,-40 80,0" fill="#fca5a5" stroke="#dc2626" stroke-width="0.5" stroke-linejoin="round"/>
                 <polygon points="80,0 120,-40 120,40 80,80" fill="#dc2626" stroke="#991b1b" stroke-width="0.5" stroke-linejoin="round"/>
                 <rect x="0" y="0" width="80" height="80" fill="#ef4444" stroke="#dc2626" stroke-width="0.5" stroke-linejoin="round"/>
                 <path d="`;
-                for(let i=1; i<10; i++) {
-                    let offset = i*8;
-                    let dX = i*4;
-                    let dY = -i*4;
-                    svgThousand += `M${offset},0 v80 M0,${offset} h80 `;
-                    svgThousand += `M${dX},${dY} h80 M${offset},0 l40,-40 `;
-                    svgThousand += `M80,${offset} l40,-40 M${80+dX},${dY} v80 `;
-                }
-            svgThousand += `" stroke="#dc2626" stroke-width="0.5" fill="none"/></svg>`;
+            for(let i=1; i<10; i++) {
+                let offset = i*8; let dX = i*4; let dY = -i*4;
+                svgThousand += `M${offset},0 v80 M0,${offset} h80 `;
+                svgThousand += `M${dX},${dY} h80 M${offset},0 l40,-40 `;
+                svgThousand += `M80,${offset} l40,-40 M${80+dX},${dY} v80 `;
+            }
+            svgThousand += `" stroke="#dc2626" stroke-width="0.5" fill="none"/>`;
 
-            // Layout
-            let html = `<div class="flex flex-wrap items-end justify-center gap-8 p-4 w-full h-full bg-white overflow-y-auto custom-scrollbar">`;
+            // -- LOGIQUE DE POSITIONNEMENT --
+            // Offsets optimisés pour une belle perspective
+            let stack_dx_th = 30, stack_dy_th = 30; 
+            let stack_dx_h = 8, stack_dy_h = 8;
+            let gap_t = 14;
+            let gap_u_x = 14, gap_u_y = 14;
+            let groupGap = 20;
 
+            let currentX = 0;
+            let elements = "";
+            let maxX = 0;
+            let minY = 0; 
+            let maxY = 80; 
+
+            // Ordre de dessin inverse (du fond vers l'avant)
             if (th > 0) {
-                html += `<div class="relative flex items-end shrink-0" style="width: ${126 + (th-1)*20}px; height: ${126 + (th-1)*20}px;">`;
                 for (let i = 0; i < th; i++) {
-                    let oX = (th - 1 - i) * 20;
-                    let oY = -(th - 1 - i) * 20;
-                    html += `<div class="absolute bottom-0 left-0" style="transform: translate(${oX}px, ${oY}px); z-index: ${i};">${svgThousand}</div>`;
+                    let x = currentX + (th - 1 - i) * stack_dx_th;
+                    let y = -(th - 1 - i) * stack_dy_th;
+                    elements += `<g transform="translate(${x}, ${y})">${svgThousand}</g>`;
+                    minY = Math.min(minY, y - 40);
                 }
-                html += `</div>`;
+                let groupW = 120 + (th - 1) * stack_dx_th;
+                currentX += groupW + groupGap;
             }
 
             if (h > 0) {
-                html += `<div class="relative flex items-end shrink-0" style="width: ${86 + (h-1)*8}px; height: ${86 + (h-1)*8}px;">`;
                 for (let i = 0; i < h; i++) {
-                    let oX = (h - 1 - i) * 8;
-                    let oY = -(h - 1 - i) * 8;
-                    html += `<div class="absolute bottom-0 left-0" style="transform: translate(${oX}px, ${oY}px); z-index: ${i};">${svgHundred}</div>`;
+                    let x = currentX + (h - 1 - i) * stack_dx_h;
+                    let y = -(h - 1 - i) * stack_dy_h;
+                    elements += `<g transform="translate(${x}, ${y})">${svgHundred}</g>`;
+                    minY = Math.min(minY, y - 4);
                 }
-                html += `</div>`;
+                let groupW = 84 + (h - 1) * stack_dx_h;
+                currentX += groupW + groupGap;
             }
 
             if (t > 0) {
-                html += `<div class="flex flex-wrap items-end justify-start gap-1 shrink-0" style="max-width: 100px;">`;
-                for (let i = 0; i < t; i++) html += `<div>${svgTen}</div>`;
-                html += `</div>`;
+                for (let i = 0; i < t; i++) {
+                    let x = currentX + i * gap_t;
+                    elements += `<g transform="translate(${x}, 0)">${svgTen}</g>`;
+                }
+                let groupW = 12 + (t - 1) * gap_t;
+                currentX += groupW + groupGap;
+                minY = Math.min(minY, -4);
             }
 
             if (u > 0) {
-                html += `<div class="flex flex-wrap items-end justify-start gap-1 shrink-0" style="max-width: 60px;">`;
-                for (let i = 0; i < u; i++) html += `<div>${svgUnit}</div>`;
-                html += `</div>`;
+                let u_rows = Math.ceil(u / 5);
+                for (let i = 0; i < u; i++) {
+                    let col = i % 5;
+                    let row = Math.floor(i / 5);
+                    let x = currentX + col * gap_u_x;
+                    let y = 72 - row * gap_u_y; 
+                    elements += `<g transform="translate(${x}, ${y})">${svgUnit}</g>`;
+                    minY = Math.min(minY, y - 4);
+                }
+                let u_cols = Math.min(u, 5);
+                let groupW = 12 + (u_cols - 1) * gap_u_x;
+                currentX += groupW;
             }
 
-            html += `</div>`;
-            return html;
+            maxX = currentX > 0 ? currentX : 12;
+            if (th === 0 && h === 0 && t === 0 && u > 0 && currentX > groupGap) {
+                 maxX = currentX; 
+            }
+            if (u === 0 && currentX > 0) {
+                maxX -= groupGap;
+            }
+
+            let padding = 8;
+            let vbX = -padding;
+            let vbY = minY - padding;
+            let vbW = maxX + padding * 2;
+            let vbH = (80 - minY) + padding + 10;
+
+            return `<svg viewBox="${vbX} ${vbY} ${vbW} ${vbH}" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));">${elements}</svg>`;
         }
 
         // =====================================================================
@@ -474,6 +513,7 @@
                     </select>
 
                     <select id="limit-select-${id}" onchange="updateCardSettings(${id}, 'limit', this.value)" class="bg-white border-2 border-slate-300 rounded-lg h-9 px-2 font-bold text-slate-700 outline-none text-xs cursor-pointer">
+                        <option value="10" ${c.limit==10?'selected':''}>&lt; 10</option>
                         <option value="100" ${c.limit==100?'selected':''}>&lt; 100</option>
                         <option value="1000" ${c.limit==1000?'selected':''}>&lt; 1 000</option>
                         <option value="10000" ${c.limit==10000?'selected':''}>&lt; 10 000</option>
@@ -492,7 +532,7 @@
                     <div class="front absolute w-full h-full bg-white rounded-3xl shadow-xl p-3 md:p-4 border-4 border-slate-200 overflow-hidden flex flex-col">
                         ${settingsHtml}
                         
-                        <!-- LIGNE DE CALCUL (Taille dynamique) -->
+                        <!-- LIGNE DE CALCUL -->
                         <div class="bg-slate-900 rounded-xl text-white mb-2 shadow-inner py-4 flex items-center justify-center shrink-0 border-b-4 border-slate-700 min-h-[85px]">
                             <h2 class="font-bold tracking-widest text-center px-4 w-full whitespace-nowrap overflow-hidden text-ellipsis flex items-center justify-center transition-all duration-300" id="op-display-${id}">---</h2>
                         </div>
@@ -504,7 +544,7 @@
 
                         <!-- ZONE REPONSE -->
                         <div class="shrink-0 flex flex-col items-center mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-slate-200">
-                            <input type="number" id="mental-inp-${id}" placeholder="Réponse..." class="w-full md:w-3/4 h-16 md:h-20 text-center text-4xl md:text-5xl font-black text-slate-900 bg-white border-4 border-slate-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-200 focus:outline-none shadow-inner transition-all">
+                            <input type="number" id="mental-inp-${id}" placeholder="Réponse..." onkeypress="if(event.key === 'Enter') corriger(${id})" class="w-full md:w-3/4 h-16 md:h-20 text-center text-4xl md:text-5xl font-black text-slate-900 bg-white border-4 border-slate-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-200 focus:outline-none shadow-inner transition-all">
                         </div>
 
                         <!-- ACTION INDIVIDUELLE -->
@@ -522,7 +562,7 @@
                             <div id="correction-badge-${id}" class="px-6 py-2 rounded-xl font-black text-sm shadow text-white tracking-widest"></div>
                         </div>
 
-                        <!-- CALCUL CENTRAL (Taille dynamique) -->
+                        <!-- CALCUL CENTRAL -->
                         <div class="shrink-0 flex items-center justify-center my-3 w-full z-20 relative">
                             <div id="correct-eq-${id}" class="w-full text-center flex flex-col justify-center items-center gap-y-3 bg-white p-5 md:p-6 rounded-3xl shadow-md border-2 border-slate-200 font-bold transition-all duration-300"></div>
                         </div>
@@ -547,7 +587,7 @@
             if(limitSelect) limitSelect.value = newLimit;
 
             updateSkillSelectUI(id);
-            genererUnProbleme(id);
+            updateCardSettings(id, 'skill', cardsData[id].skill); 
         }
 
         function updateSkillSelectUI(id) {
@@ -567,11 +607,30 @@
         function updateCardSettings(id, key, value) {
             if(key === 'limit') value = parseInt(value);
             cardsData[id][key] = value;
+            
+            let skill = cardsData[id].skill;
+            let limitSelect = document.getElementById(`limit-select-${id}`);
+            if(limitSelect) {
+                let disableLimitSkills = [
+                    'cp_mult_tables', 'ce1_mult_1_5', 'ce2_mult_1_5', 'ce2_mult_6_10', 'cm1_mult_1_10', 'cm1_mult_11_12', 'cm2_mult_1_12',
+                    'cp_mult_10', 'ce1_mult_10_100', 'ce2_mult_10_100_1000', 'cm1_mult_1k_10k', 'cm2_mult_10k_100k_1m',
+                    'cp_tables_add_sub', 'ce1_tables_add_sub', 'ce2_tables_add_sub', 'cm1_tables_add_sub', 'cm2_tables_add_sub'
+                ];
+                if(disableLimitSkills.includes(skill)) {
+                    limitSelect.disabled = true;
+                    limitSelect.classList.add('opacity-50', 'cursor-not-allowed');
+                } else {
+                    limitSelect.disabled = false;
+                    limitSelect.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
             genererUnProbleme(id);
         }
 
         function initAllGames() {
-            for(let i=0; i<globalState.playersCount; i++) genererUnProbleme(i);
+            for(let i=0; i<globalState.playersCount; i++) {
+                updateCardSettings(i, 'skill', cardsData[i].skill);
+            }
         }
 
         function getRandomInt(min, max) { 
@@ -587,12 +646,13 @@
             let c = cardsData[id];
             let max = parseInt(c.limit);
             let skill = c.skill;
+            let minBase = max >= 100 ? max / 10 : 1; 
             
             c.op = '+'; c.n1 = 0; c.n2 = 0; c.ans = 0; 
             c.subtype = null; 
 
             switch(skill) {
-                case 'add_sub_5':
+                case 'cp_add_sub_5':
                     c.op = Math.random() > 0.5 ? '+' : '-';
                     c.n2 = 5;
                     if (c.op === '+') { c.n1 = getRandomInt(0, max - c.n2); }
@@ -600,14 +660,14 @@
                     c.ans = c.op === '+' ? c.n1 + c.n2 : c.n1 - c.n2;
                     break;
                     
-                case 'add_8_9_cp':
+                case 'cp_add_8_9':
                     c.op = '+';
                     c.n2 = getRandomInt(8, 9);
                     c.n1 = getRandomInt(0, max - c.n2);
                     c.ans = c.n1 + c.n2;
                     break;
                     
-                case 'somme_simple_cp':
+                case 'cp_somme_simple':
                     c.op = '+';
                     c.n1 = getRandomInt(1, 9);
                     c.n2 = getRandomInt(1, Math.min(49, max - c.n1));
@@ -615,47 +675,49 @@
                     c.ans = c.n1 + c.n2;
                     break;
                     
-                case 'tables_add_sub_cp':
-                case 'tables_add_sub_ce1':
-                case 'tables_add_sub_ce2':
-                case 'tables_add_sub_cm1':
-                case 'tables_add_sub_cm2':
-                    if (skill === 'tables_add_sub_cp') c.op = '+';
+                case 'cp_tables_add_sub':
+                case 'ce1_tables_add_sub':
+                case 'ce2_tables_add_sub':
+                case 'cm1_tables_add_sub':
+                case 'cm2_tables_add_sub':
+                    if (skill === 'cp_tables_add_sub') c.op = '+';
                     else c.op = Math.random() > 0.5 ? '+' : '-';
                     
-                    c.n1 = getRandomInt(1, max);
-                    c.n2 = getRandomInt(1, max);
+                    c.n1 = getRandomInt(1, 10);
+                    c.n2 = getRandomInt(1, 10);
                     if(c.op === '+') {
-                        if(c.n1 + c.n2 > max) { c.n1 = Math.floor(max/2); c.n2 = getRandomInt(1, Math.floor(max/2)); }
                         c.ans = c.n1 + c.n2;
                     } else {
-                        if(c.n1 < c.n2) [c.n1, c.n2] = [c.n2, c.n1];
-                        c.ans = c.n1 - c.n2;
+                        c.ans = c.n1; 
+                        c.n1 = c.ans + c.n2; 
                     }
                     break;
 
-                case 'add_sub_10_100':
-                case 'add_sub_10_100_1000':
-                case 'add_sub_10k_100k':
-                case 'add_sub_10k_100k_1m':
+                case 'ce1_add_sub_10_100':
+                case 'ce2_add_sub_10_100_1000':
+                case 'cm1_add_sub_10k_100k':
+                case 'cm2_add_sub_10k_100k_1m':
                     c.op = Math.random() > 0.5 ? '+' : '-';
                     let steps = [10, 100, 1000, 10000, 100000, 1000000];
                     let allowed = steps.filter(s => s <= max);
-                    if (skill === 'add_sub_10_100') allowed = [10, 100];
-                    if (skill === 'add_sub_10_100_1000') allowed = [10, 100, 1000];
-                    if (skill === 'add_sub_10k_100k') allowed = [10000, 100000];
-                    if (skill === 'add_sub_10k_100k_1m') allowed = [10000, 100000, 1000000];
+                    if (skill.endsWith('add_sub_10_100')) allowed = [10, 100];
+                    if (skill.endsWith('add_sub_10_100_1000')) allowed = [10, 100, 1000];
+                    if (skill.endsWith('add_sub_10k_100k')) allowed = [10000, 100000];
+                    if (skill.endsWith('add_sub_10k_100k_1m')) allowed = [10000, 100000, 1000000];
                     allowed = allowed.filter(s => s <= max);
                     if(allowed.length === 0) allowed = [max > 0 ? max : 10];
                     
                     c.n2 = allowed[Math.floor(Math.random() * allowed.length)];
                     
-                    if(c.op === '+') { c.n1 = getRandomInt(1, max - c.n2); }
-                    else { c.n1 = getRandomInt(c.n2, max); }
+                    if(c.op === '+') { c.n1 = getRandomInt(minBase, max - c.n2); }
+                    else { c.n1 = getRandomInt(Math.max(c.n2, minBase), max); }
                     c.ans = c.op === '+' ? c.n1 + c.n2 : c.n1 - c.n2;
                     break;
 
-                case 'add_sub_8_9_fin':
+                case 'ce1_add_sub_8_9_fin':
+                case 'ce2_add_sub_8_9_fin':
+                case 'cm1_add_sub_8_9_fin':
+                case 'cm2_add_sub_8_9_fin':
                     c.op = Math.random() > 0.5 ? '+' : '-';
                     let maxBase = Math.floor(max / 10) - 1;
                     if(maxBase < 0) maxBase = 0;
@@ -663,46 +725,65 @@
                     c.n2 = base * 10 + (Math.random() > 0.5 ? 8 : 9);
                     if(c.n2 > max) c.n2 = 8;
                     
-                    if(c.op === '+') { c.n1 = getRandomInt(1, max - c.n2); }
-                    else { c.n1 = getRandomInt(c.n2, max); }
+                    if(c.op === '+') { c.n1 = getRandomInt(minBase, max - c.n2); }
+                    else { c.n1 = getRandomInt(Math.max(c.n2, minBase), max); }
                     c.ans = c.op === '+' ? c.n1 + c.n2 : c.n1 - c.n2;
                     break;
 
-                case 'comp_10':
-                case 'comp_10_100':
-                case 'comp_10_100_1000':
-                case 'comp_10k_100k':
-                case 'comp_10k_100k_1m':
+                case 'cp_comp_limit':
+                case 'ce1_comp_limit':
+                case 'ce2_comp_limit':
+                case 'cm1_comp_limit':
+                case 'cm2_comp_limit':
                     c.op = '+';
                     c.ans = max; 
-                    c.n1 = getRandomInt(1, max - 1);
-                    c.n2 = max - c.n1;
+                    let step = 1;
+                    if (c.ans >= 100 && Math.random() > 0.3) step = 10;
+                    if (c.ans >= 1000 && Math.random() > 0.5) step = 100;
+                    if (c.ans >= 10000 && Math.random() > 0.5) step = 1000;
+                    
+                    c.n1 = getRandomInt(1, Math.floor((c.ans - 1) / step)) * step;
+                    c.n2 = c.ans - c.n1;
                     break;
 
-                case 'doubles_moities':
+                case 'cp_doubles_moities':
+                case 'ce1_doubles_moities':
+                case 'ce2_doubles_moities':
+                case 'cm1_doubles_moities':
+                case 'cm2_doubles_moities':
                     let isDouble = Math.random() > 0.5;
                     c.subtype = isDouble ? 'double' : 'moitie';
                     c.op = isDouble ? 'x' : '÷';
                     if (isDouble) {
-                        c.n1 = getRandomInt(1, Math.floor(max / 2));
+                        c.n1 = getRandomInt(minBase, Math.floor(max / 2));
                         c.ans = c.n1 * 2;
                     } else {
-                        c.n1 = getRandomInt(1, Math.floor(max / 2)) * 2;
+                        c.n1 = getRandomInt(minBase, Math.floor(max / 2)) * 2;
                         c.ans = c.n1 / 2;
                     }
                     break;
-
-                case 'mult_1_5':
-                case 'mult_6_10':
-                case 'mult_1_10':
-                case 'mult_11_12':
-                case 'mult_1_12':
+                    
+                case 'cp_mult_tables':
                     c.op = 'x';
-                    if(skill === 'mult_1_5') c.n2 = getRandomInt(1, 5);
-                    else if(skill === 'mult_6_10') c.n2 = getRandomInt(6, 10);
-                    else if(skill === 'mult_1_10') c.n2 = getRandomInt(1, 10);
-                    else if(skill === 'mult_11_12') c.n2 = getRandomInt(11, 12);
-                    else if(skill === 'mult_1_12') c.n2 = getRandomInt(1, 12);
+                    let cp_opts = [1, 2, 4, 10];
+                    c.n2 = cp_opts[Math.floor(Math.random() * cp_opts.length)];
+                    c.n1 = getRandomInt(1, 10);
+                    if(Math.random() > 0.5) [c.n1, c.n2] = [c.n2, c.n1];
+                    c.ans = c.n1 * c.n2;
+                    break;
+
+                case 'ce1_mult_1_5':
+                case 'ce2_mult_1_5':
+                case 'ce2_mult_6_10':
+                case 'cm1_mult_1_10':
+                case 'cm1_mult_11_12':
+                case 'cm2_mult_1_12':
+                    c.op = 'x';
+                    if(skill.endsWith('mult_1_5')) c.n2 = getRandomInt(1, 5);
+                    else if(skill.endsWith('mult_6_10')) c.n2 = getRandomInt(6, 10);
+                    else if(skill.endsWith('mult_1_10')) c.n2 = getRandomInt(1, 10);
+                    else if(skill.endsWith('mult_11_12')) c.n2 = getRandomInt(11, 12);
+                    else if(skill.endsWith('mult_1_12')) c.n2 = getRandomInt(1, 12);
                     
                     let maxN1 = Math.floor(max / c.n2);
                     if(maxN1 < 1) maxN1 = 1;
@@ -711,15 +792,17 @@
                     c.ans = c.n1 * c.n2;
                     break;
 
-                case 'mult_10':
-                case 'mult_10_100_1000':
-                case 'mult_1k_10k':
-                case 'mult_10k_100k_1m':
+                case 'cp_mult_10':
+                case 'ce1_mult_10_100':
+                case 'ce2_mult_10_100_1000':
+                case 'cm1_mult_1k_10k':
+                case 'cm2_mult_10k_100k_1m':
                     c.op = 'x';
                     let m_opts = [10];
-                    if(skill === 'mult_10_100_1000') m_opts = [10, 100, 1000];
-                    if(skill === 'mult_1k_10k') m_opts = [1000, 10000];
-                    if(skill === 'mult_10k_100k_1m') m_opts = [10000, 100000, 1000000];
+                    if (skill.endsWith('mult_10_100')) m_opts = [10, 100];
+                    if (skill.endsWith('mult_10_100_1000')) m_opts = [10, 100, 1000];
+                    if (skill.endsWith('mult_1k_10k')) m_opts = [1000, 10000];
+                    if (skill.endsWith('mult_10k_100k_1m')) m_opts = [10000, 100000, 1000000]; 
                     
                     let v_opts = m_opts.filter(m => m <= max);
                     if(v_opts.length === 0) v_opts = [10];
@@ -731,11 +814,14 @@
                     c.ans = c.n1 * c.n2;
                     break;
 
-                case 'mult_end_0':
+                case 'ce1_mult_end_0':
+                case 'ce2_mult_end_0':
+                case 'cm1_mult_end_0':
+                case 'cm2_mult_end_0':
                     c.op = 'x';
-                    let mag = Math.floor(Math.log10(max)) - 1;
+                    let mag = Math.floor(Math.log10(max)) - 1; 
                     if (mag < 1) mag = 1;
-                    let z = getRandomInt(1, mag);
+                    let z = getRandomInt(1, Math.max(1, mag - 1));
                     c.n2 = getRandomInt(1, 9) * Math.pow(10, z);
                     if(c.n2 > max) c.n2 = 10;
                     c.n1 = getRandomInt(2, Math.max(2, Math.floor(max / c.n2)));
@@ -743,7 +829,10 @@
                     c.ans = c.n1 * c.n2;
                     break;
 
-                case 'mult_decomp':
+                case 'ce1_mult_decomp':
+                case 'ce2_mult_decomp':
+                case 'cm1_mult_decomp':
+                case 'cm2_mult_decomp':
                     c.op = 'x';
                     c.n2 = getRandomInt(2, Math.min(12, Math.floor(Math.sqrt(max))));
                     c.n1 = getRandomInt(11, Math.floor(max / c.n2));
@@ -755,11 +844,11 @@
                     c.op = '+'; c.ans = getRandomInt(10, max); c.n1 = getRandomInt(1, c.ans-1); c.n2 = c.ans - c.n1;
             }
 
-            // --- AFFICHAGE DE LA LIGNE (Avec logique Complément modifiée) ---
+            // --- AFFICHAGE DE LA LIGNE ---
             let htmlSym = `<span class="text-amber-400 mx-2">${getOpSym(c.op)}</span>`;
             let htmlEq = `<span class="text-slate-400 ml-2">=</span>`;
             
-            if (skill === 'doubles_moities') {
+            if (skill.includes('doubles_moities')) {
                 let typeText = c.subtype === 'double' ? 'Double de' : 'Moitié de';
                 if (c.format === 'classique') {
                     c.display = `<span class="text-slate-400 mr-3">${typeText}</span><span class="text-white">${fmtNum(c.n1)}</span>`;
@@ -768,7 +857,7 @@
                 }
                 c.expected = c.ans;
             } else if (c.format === 'classique') {
-                if(skill.startsWith('comp_')) {
+                if(skill.includes('comp_')) {
                     c.display = `${fmtNum(c.n1)} ${htmlSym} <span class="text-emerald-400">...</span> ${htmlEq} <span class="text-slate-100 ml-2">${fmtNum(c.ans)}</span>`;
                     c.expected = c.n2;
                 } else {
@@ -777,8 +866,8 @@
                 }
             } else {
                 // Format Boulier / Blocs
-                if(skill.startsWith('comp_')) {
-                    // Visuel = c.n1. On cherche c.n2. Target = c.ans
+                if(skill.includes('comp_')) {
+                    // Visuel = c.n1. Target = c.ans
                     c.display = `<span class="text-slate-400 border-b-4 border-slate-500 pb-1 px-2">...</span> ${htmlSym} <span class="text-emerald-400">...</span> ${htmlEq} <span class="text-slate-100 ml-2">${fmtNum(c.ans)}</span>`;
                     c.expected = c.n2;
                 } else {
@@ -849,7 +938,7 @@
                 badge.innerHTML = `<i class="fa-solid fa-xmark mr-2"></i>ERREUR`;
             }
             
-            // --- Construction du verso avec Auto-Scaling de la police ---
+            // --- Construction du verso avec Auto-Scaling ---
             let backEq = document.getElementById(`correct-eq-${id}`);
             let maxNum = Math.max(c.n1 || 0, c.n2 || 0, c.ans || 0);
             backEq.classList.remove('text-2xl', 'md:text-3xl', 'text-3xl', 'md:text-4xl', 'text-4xl', 'md:text-5xl');
@@ -862,7 +951,7 @@
                 backEq.classList.add('text-2xl', 'md:text-3xl');
             }
 
-            if (c.skill === 'doubles_moities') {
+            if (c.skill.includes('doubles_moities')) {
                 let typeText = c.subtype === 'double' ? 'Double de' : 'Moitié de';
                 backEq.innerHTML = `<div class="flex items-center justify-center flex-wrap w-full">
                     <span class="text-slate-500 mr-4">${typeText}</span>
@@ -877,14 +966,14 @@
                 
                 if (c.format === 'boulier' || c.format === 'blocs') {
                     n1Str = `<span class="text-slate-900">${fmtNum(c.n1)}</span>`; 
-                    if (c.skill.startsWith('comp_')) {
+                    if (c.skill.includes('comp_')) {
                         n2Str = `<span class="text-emerald-500">${fmtNum(c.n2)}</span>`; 
                         ansStr = `<span class="text-slate-500">${fmtNum(c.ans)}</span>`;
                     } else {
                         n2Str = `<span class="text-slate-500">${fmtNum(c.n2)}</span>`; 
                         ansStr = `<span class="text-emerald-500">${fmtNum(c.ans)}</span>`; 
                     }
-                } else if (c.skill.startsWith('comp_')) {
+                } else if (c.skill.includes('comp_')) {
                     n1Str = `<span class="text-slate-500">${fmtNum(c.n1)}</span>`; 
                     n2Str = `<span class="text-emerald-500">${fmtNum(c.n2)}</span>`; 
                     ansStr = `<span class="text-slate-500">${fmtNum(c.ans)}</span>`; 
@@ -894,7 +983,7 @@
                     ansStr = `<span class="text-emerald-500">${fmtNum(c.ans)}</span>`;
                 }
                 
-                if (c.skill.startsWith('mult_decomp')) {
+                if (c.skill.includes('mult_decomp')) {
                     let t1 = Math.floor(c.n1 / 10) * 10;
                     let u1 = c.n1 % 10;
                     backEq.innerHTML = `
