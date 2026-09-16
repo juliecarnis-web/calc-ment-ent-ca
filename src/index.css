@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+/* 3D Flip Card Engine with strict backface visibility */
+.perspective-1000 {
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.front,
+.back {
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.front {
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
+}
+
+.back {
+  z-index: 10;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+
+.flipper {
+  transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.flipped .flipper {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+/* Chrome, Safari, Edge, Opera number input spin buttons removal */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}

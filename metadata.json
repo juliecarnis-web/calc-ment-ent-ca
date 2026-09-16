@@ -1,0 +1,6 @@
+{
+  "name": "Calcul Mental - Classe Adaptative",
+  "description": "Application d'entraînement au calcul mental pour tous les niveaux (CP à CM2) avec abaque soroban, blocs de base 10, modes duel/équipe et chronomètre.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
